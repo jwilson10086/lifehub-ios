@@ -1,0 +1,41 @@
+name: LifeHub
+options:
+  bundleIdPrefix: com.lifehub
+  deploymentTarget:
+    iOS: "17.0"
+  generateEmptyDirectories: true
+
+settings:
+  SWIFT_VERSION: "5.0"
+  TARGETED_DEVICE_FAMILY: "1"
+  CODE_SIGN_STYLE: Manual
+  CODE_SIGNING_ALLOWED: NO
+  CODE_SIGNING_REQUIRED: NO
+
+targets:
+  LifeHub:
+    type: application
+    platform: iOS
+    sources:
+      - Sources
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleDisplayName: 生活账
+        CFBundleName: 生活账
+        CFBundleLocalizations:
+          - zh_CN
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: true
+        UIFileSharingEnabled: true
+        NSCalendarsUsageDescription: 用于把预约和日程写入系统日历并在开始前提醒
+        NSCalendarsFullAccessUsageDescription: 用于把预约和日程写入系统日历并在开始前提醒
+        CFBundleURLTypes:
+          - CFBundleURLName: com.lifehub.capture
+            CFBundleURLSchemes:
+              - lifehub
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.lifehub.app
+      GENERATE_INFOPLIST_FILE: NO
+      SWIFT_EMIT_LOC_STRINGS: YES
