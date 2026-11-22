@@ -27,18 +27,18 @@ struct ContentView: View {
 
     var body: some View {
         TabView {
-            home.tabItem { Label("总览", systemImage: "house") }
-            ledgerView.tabItem { Label("账本", systemImage: "yuan.sign") }
-            eventView(appointments: true).tabItem { Label("预约", systemImage: "calendar") }
-            eventView(appointments: false).tabItem { Label("日程", systemImage: "pin") }
-            notesView.tabItem { Label("随手记", systemImage: "note.text") }
+            home.tabItem { Label("鎬昏", systemImage: "house") }
+            ledgerView.tabItem { Label("璐︽湰", systemImage: "yuan.sign") }
+            eventView(appointments: true).tabItem { Label("棰勭害", systemImage: "calendar") }
+            eventView(appointments: false).tabItem { Label("鏃ョ▼", systemImage: "pin") }
+            notesView.tabItem { Label("闅忔墜璁?, systemImage: "note.text") }
         }
         .sheet(isPresented: $showAdd) {
             AddRecordView(initial: addInitial).environmentObject(store)
         }
         .fileExporter(isPresented: $showExport,
                       document: BackupDocument(text: String(data: store.exportData, encoding: .utf8) ?? ""),
-                      contentType: .json, defaultFilename: "生活账备份") { _ in }
+                      contentType: .json, defaultFilename: "鐢熸椿璐﹀浠?) { _ in }
         .fileImporter(isPresented: $showImport, allowedContentTypes: [.json]) { result in
             guard case .success(let url) = result else { return }
             guard url.startAccessingSecurityScopedResource() else { return }
@@ -47,13 +47,13 @@ struct ContentView: View {
                 let d = try Data(contentsOf: url)
                 let decoded = try JSONDecoder().decode(AppData.self, from: d)
                 store.merge(decoded)
-                alertText = "导入完成"
+                alertText = "瀵煎叆瀹屾垚"
             } catch {
-                alertText = "导入失败：备份文件格式不对"
+                alertText = "瀵煎叆澶辫触锛氬浠芥枃浠舵牸寮忎笉瀵?
             }
         }
         .alert(alertText, isPresented: .constant(!alertText.isEmpty)) {
-            Button("好") { alertText = "" }
+            Button("濂?) { alertText = "" }
         }
         .onReceive(NotificationCenter.default.publisher(for: .lifehubCapture)) { note in
             if let text = note.object as? String {
@@ -63,26 +63,26 @@ struct ContentView: View {
         }
     }
 
-    // MARK: - 总览
+    // MARK: - 鎬昏
 
     private var home: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 14) {
                     HStack(spacing: 10) {
-                        statCard("本月收入", moneyString(monthIncome), .green)
-                        statCard("本月支出", moneyString(monthExpense), .red)
-                        statCard("结余", moneyString(monthIncome - monthExpense), .primary)
+                        statCard("鏈湀鏀跺叆", moneyString(monthIncome), .green)
+                        statCard("鏈湀鏀嚭", moneyString(monthExpense), .red)
+                        statCard("缁撲綑", moneyString(monthIncome - monthExpense), .primary)
                     }
                     VStack(alignment: .leading, spacing: 0) {
-                        Text("接下来").font(.headline).padding(.bottom, 6)
+                        Text("鎺ヤ笅鏉?).font(.headline).padding(.bottom, 6)
                         if upcoming.isEmpty {
-                            Text("暂无安排").foregroundColor(.secondary).font(.subheadline).padding(.vertical, 12)
+                            Text("鏆傛棤瀹夋帓").foregroundColor(.secondary).font(.subheadline).padding(.vertical, 12)
                         } else {
                             ForEach(upcoming.prefix(5), id: \.id) { item in
                                 HStack {
                                     VStack(alignment: .leading) {
-                                        Text(item.title.isEmpty ? "未命名" : item.title)
+                                        Text(item.title.isEmpty ? "鏈懡鍚? : item.title)
                                         Text(dayLabel(item.datetime) + " " + dateTimeString(item.datetime))
                                             .font(.caption).foregroundColor(.secondary)
                                     }
@@ -96,10 +96,10 @@ struct ContentView: View {
                     .cardStyle()
 
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("快捷记录").font(.headline)
-                        Text("背敲三下手机 → 快捷指令截屏识别 → 自动弹出确认窗口。")
+                        Text("蹇嵎璁板綍").font(.headline)
+                        Text("鑳屾暡涓変笅鎵嬫満 鈫?蹇嵎鎸囦护鎴睆璇嗗埆 鈫?鑷姩寮瑰嚭纭绐楀彛銆?)
                             .font(.caption).foregroundColor(.secondary)
-                        Button("新增记录") {
+                        Button("鏂板璁板綍") {
                             addInitial = Parsed()
                             showAdd = true
                         }
@@ -109,13 +109,13 @@ struct ContentView: View {
                 }
                 .padding()
             }
-            .navigationTitle("生活账")
+            .navigationTitle("鐢熸椿璐?)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button { showExport = true } label { Image(systemName: "square.and.arrow.up") }
+                    Button { showExport = true } label: { Image(systemName: "square.and.arrow.up") }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button { showImport = true } label { Image(systemName: "square.and.arrow.down") }
+                    Button { showImport = true } label: { Image(systemName: "square.and.arrow.down") }
                 }
             }
         }
@@ -146,7 +146,7 @@ struct ContentView: View {
             .sorted { $0.datetime < $1.datetime }
     }
 
-    // MARK: - 账本
+    // MARK: - 璐︽湰
 
     private var ledgerView: some View {
         NavigationStack {
@@ -155,11 +155,11 @@ struct ContentView: View {
                     HStack {
                         VStack(alignment: .leading) {
                             Text(item.category)
-                            Text(item.note.isEmpty ? item.date : item.note + " · " + item.date)
+                            Text(item.note.isEmpty ? item.date : item.note + " 路 " + item.date)
                                 .font(.caption).foregroundColor(.secondary)
                         }
                         Spacer()
-                        Text((item.type == "income" ? "+" : "−") + moneyString(item.amount))
+                        Text((item.type == "income" ? "+" : "鈭?) + moneyString(item.amount))
                             .foregroundColor(item.type == "income" ? .green : .red)
                     }
                 }
@@ -168,16 +168,16 @@ struct ContentView: View {
                     ids.forEach { store.deleteLedger($0) }
                 }
             }
-            .navigationTitle("账本")
+            .navigationTitle("璐︽湰")
             .toolbar {
-                Button { addInitial = Parsed(type: "expense"); showAdd = true } label {
+                Button { addInitial = Parsed(type: "expense"); showAdd = true } label: {
                     Image(systemName: "plus")
                 }
             }
         }
     }
 
-    // MARK: - 预约 / 日程
+    // MARK: - 棰勭害 / 鏃ョ▼
 
     private func eventView(appointments: Bool) -> some View {
         NavigationStack {
@@ -185,14 +185,14 @@ struct ContentView: View {
                 ForEach(appointments ? store.data.appointments : store.data.schedules) { item in
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(item.title.isEmpty ? "未命名" : item.title)
-                            Text(dateTimeString(item.datetime) + (item.place.isEmpty ? "" : " · " + item.place))
+                            Text(item.title.isEmpty ? "鏈懡鍚? : item.title)
+                            Text(dateTimeString(item.datetime) + (item.place.isEmpty ? "" : " 路 " + item.place))
                                 .font(.caption).foregroundColor(.secondary)
                         }
                         Spacer()
                         Button {
                             Reminders.remind(title: item.title, note: item.note, date: item.datetime)
-                        } label { Image(systemName: "bell.badge") }
+                        } label: { Image(systemName: "bell.badge") }
                         .buttonStyle(.borderless)
                     }
                 }
@@ -204,17 +204,16 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationTitle(appointments ? "预约" : "日程")
+            .navigationTitle(appointments ? "棰勭害" : "鏃ョ▼")
             .toolbar {
-                Button { addInitial = Parsed(type: appointments ? "appointment" : "schedule"); showAdd = true } label {
+                Button { addInitial = Parsed(type: appointments ? "appointment" : "schedule"); showAdd = true } label: {
                     Image(systemName: "plus")
                 }
             }
         }
     }
 
-    // MARK: - 随手记
-
+    // MARK: - 闅忔墜璁?
     private var notesView: some View {
         NavigationStack {
             List {
@@ -231,9 +230,9 @@ struct ContentView: View {
                     ids.forEach { store.deleteNote($0) }
                 }
             }
-            .navigationTitle("随手记")
+            .navigationTitle("闅忔墜璁?)
             .toolbar {
-                Button { addInitial = Parsed(type: "note"); showAdd = true } label {
+                Button { addInitial = Parsed(type: "note"); showAdd = true } label: {
                     Image(systemName: "plus")
                 }
             }
